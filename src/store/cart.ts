@@ -1,3 +1,4 @@
+"use client"
 import { create } from 'zustand'
 
 export type CartItem = {
@@ -17,8 +18,9 @@ type CartState = {
 const STORAGE_KEY = 'termo.cart.v1'
 
 const load = (): CartItem[] => {
+  if (typeof window === 'undefined') return []
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = window.localStorage.getItem(STORAGE_KEY)
     return raw ? JSON.parse(raw) : []
   } catch {
     return []
@@ -26,7 +28,8 @@ const load = (): CartItem[] => {
 }
 
 const save = (items: CartItem[]) => {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)) } catch {}
+  if (typeof window === 'undefined') return
+  try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items)) } catch {}
 }
 
 export const useCartStore = create<CartState>((set, get) => ({

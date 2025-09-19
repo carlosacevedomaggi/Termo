@@ -10,7 +10,7 @@ export type PaymentField = {
 }
 
 export type PaymentMethod = {
-  id: 'zelle' | 'pagomovil' | 'bank' | 'binance'
+  id: 'zelle' | 'pagomovil' | 'bank' | 'binance' | 'card'
   label: string
   description?: string
   currency: PaymentCurrency
@@ -26,32 +26,34 @@ export const VENEZUELAN_BANK_OPTIONS: { label: string; value: string }[] = [
   { label: 'BNC (0191)', value: '0191' },
 ]
 
-// You should replace these merchant details with your real receiving accounts
 const MERCHANT = {
-  // Zelle
   zelleName: 'TerMo Store',
   zelleEmail: 'your-zelle-email@example.com',
-
-  // Pago móvil (VES)
   pmFullName: 'TerMo Store, C.A.',
   pmPhone: '0412-0000000',
   pmNationalId: 'V-12345678',
   pmBankName: 'Banesco',
   pmBankCode: '0134',
-
-  // Transferencia bancaria (VES)
   bankFullName: 'TerMo Store, C.A.',
   bankNationalId: 'J-12345678-9',
   bankName: 'Mercantil',
   bankAccountType: 'Cuenta Corriente',
   bankAccountNumber: '0105-0000-00-0000000000',
-
-  // Binance / USDT
   binancePayId: '123456789',
   usdtTrc20Address: 'Txxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 }
 
 export const PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: 'card',
+    label: 'Credit/Debit Card',
+    description: 'Pay securely with your card',
+    currency: 'USD',
+    merchantInfo: [
+      { label: 'Status', value: 'Enabled' },
+    ],
+    fields: [],
+  },
   {
     id: 'zelle',
     label: 'Zelle (USD)',
@@ -117,7 +119,5 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
     ],
   },
 ]
-
-export const DEFAULT_EXCHANGE_RATE_VES_PER_USD = 40 // Update as needed
 
 
