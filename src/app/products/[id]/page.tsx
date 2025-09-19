@@ -1,5 +1,7 @@
 "use client"
 import { useCartStore } from '@/store/cart'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
 
 const DB: Record<string, { id: string; name: string; price: number; description: string; specs: string[] }> = {
   p1: { id: 'p1', name: 'Product A', price: 199, description: 'Elegant and powerful.', specs: ['Lightweight','Aluminum','USB-C'] },
@@ -7,11 +9,11 @@ const DB: Record<string, { id: string; name: string; price: number; description:
   p3: { id: 'p3', name: 'Product C', price: 399, description: 'Minimal yet capable.', specs: ['OLED','Wi‑Fi 6','Fast charge'] },
 }
 
-type ProductDetailPageProps = { params: { id: keyof typeof DB } }
-
-export default function ProductDetailPage({ params }: ProductDetailPageProps) {
+export default function ProductDetailPage() {
   const addToCart = useCartStore(s => s.addItem)
-  const product = params.id ? DB[params.id] : undefined
+  const { id } = useParams<{ id: keyof typeof DB }>()
+  const product = id ? DB[id] : undefined
+  const [ack, setAck] = useState<string | null>(null)
   if (!product) return <div className="container-edge py-14">Not found.</div>
   return (
     <div className="container-edge py-14 grid lg:grid-cols-2 gap-10">
@@ -20,7 +22,13 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         <h1 className="text-3xl font-semibold">{product.name}</h1>
         <p className="mt-2 opacity-80">{product.description}</p>
         <p className="mt-6 text-2xl">${product.price}</p>
-        <button onClick={() => addToCart(product)} className="btn btn-primary mt-6">Add to Cart</button>
+        {ack && <div className="mt-4 text-sm bg-black text-white px-3 py-2 rounded-md w-fit">{ack}</div>}
+        <button
+          onClick={() => { addToCart(product); setAck(`${product.name} added to cart`); setTimeout(()=>setAck(null), 1500) }}
+          className="btn btn-primary mt-6"
+        >
+          Add to Cart
+        </button>
 
         <div className="mt-10">
           <h2 className="font-medium mb-3">Specifications</h2>

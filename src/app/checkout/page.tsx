@@ -107,6 +107,15 @@ export default function CheckoutPage() {
                   </li>
                 ))}
               </ul>
+              {selectedMethod.id === 'card' && (
+                <div className="mt-3 flex items-center gap-3 opacity-80">
+                  <span className="text-xs">We accept</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span className="text-xs font-semibold border px-1.5 py-0.5 rounded">VISA</span>
+                    <span className="text-xs font-semibold border px-1.5 py-0.5 rounded">Mastercard</span>
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="grid gap-4">

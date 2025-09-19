@@ -52,7 +52,12 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
     merchantInfo: [
       { label: 'Status', value: 'Enabled' },
     ],
-    fields: [],
+    fields: [
+      { id: 'cardNumber', label: 'Card number', type: 'text', required: true, placeholder: '1234 5678 9012 3456' },
+      { id: 'cardExpiry', label: 'Expiry (MM/YY)', type: 'text', required: true, placeholder: 'MM/YY' },
+      { id: 'cardCvv', label: 'CVV', type: 'text', required: true, placeholder: '123' },
+      { id: 'nationalId', label: 'N° de cédula', type: 'text', required: true, placeholder: 'V-00000000' },
+    ],
   },
   {
     id: 'zelle',
