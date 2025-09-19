@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+:root {
+  color-scheme: light;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+.container-edge {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium transition-colors duration-200;
+}
+.btn-primary {
+  @apply bg-black text-white hover:bg-neutral-900;
+}
+.btn-outline {
+  @apply border border-black text-black hover:bg-black hover:text-white;
+}
+
+
