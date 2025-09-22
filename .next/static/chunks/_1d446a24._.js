@@ -83,13 +83,14 @@ function ProductDetailPage() {
     }, this);
     const [condition, setCondition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('new');
     const [installKit, setInstallKit] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    var _images_imgIdx, _ref;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "container-edge py-14 grid lg:grid-cols-2 gap-10",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "rounded-3xl bg-muted aspect-square overflow-hidden",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                    src: key === 'water_heater' ? '/images/termo/termo-descriptivo.jpg' : '/images/CBX/CBX-descriptivo.jpg',
+                    src: (_ref = (_images_imgIdx = images[imgIdx]) !== null && _images_imgIdx !== void 0 ? _images_imgIdx : images[0]) !== null && _ref !== void 0 ? _ref : key === 'water_heater' ? '/images/termo/termo-descriptivo.jpg' : '/images/CBX/CBX-descriptivo.jpg',
                     alt: product.name,
                     className: "w-full h-full object-cover"
                 }, void 0, false, {
