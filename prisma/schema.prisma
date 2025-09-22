@@ -32,3 +32,15 @@ model OrderItem {
   unitPrice Int
   quantity  Int
 }
+
+model Accessory {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  sku         String?
+  description String?
+  image       String?
+  price       Int
+  active      Boolean  @default(true)
+}

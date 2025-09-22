@@ -10,6 +10,7 @@ export default function CheckoutPage() {
   const [selectedMethodId, setSelectedMethodId] = useState(PAYMENT_METHODS[0].id)
   const selectedMethod = useMemo(() => PAYMENT_METHODS.find(m => m.id === selectedMethodId)!, [selectedMethodId])
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({})
+  const [cardRegion, setCardRegion] = useState<'US'|'VE'>('US')
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -96,6 +97,15 @@ export default function CheckoutPage() {
                 </label>
               ))}
             </div>
+            {selectedMethod.id === 'card' && (
+              <div className="flex items-center gap-3 mt-1">
+                <span className="text-xs opacity-70">Card region</span>
+                <div className="inline-flex rounded-md border border-border overflow-hidden">
+                  <button type="button" onClick={()=>setCardRegion('US')} className={`px-2 py-1 text-xs ${cardRegion==='US'?'bg-black text-white':'bg-white'}`}>🇺🇸 US</button>
+                  <button type="button" onClick={()=>setCardRegion('VE')} className={`px-2 py-1 text-xs ${cardRegion==='VE'?'bg-black text-white':'bg-white'}`}>🇻🇪 VE</button>
+                </div>
+              </div>
+            )}
 
             <div className="border border-border rounded-xl p-4">
               <div className="text-sm font-medium mb-2">Instructions</div>
@@ -119,7 +129,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="grid gap-4">
-              {selectedMethod.fields.map(f => (
+              {selectedMethod.fields.filter(f => !(selectedMethod.id==='card' && cardRegion==='US' && f.id==='nationalId')).map(f => (
                 <div key={f.id}>
                   <label className="text-sm opacity-70">{f.label}</label>
                   {f.type === 'select' ? (

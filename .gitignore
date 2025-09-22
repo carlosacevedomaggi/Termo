@@ -9,7 +9,5 @@ pnpm-debug.log*
 .env*
 
 /src/generated/prisma
-.next/
-.turbo/
-.vercel/
-prisma/dev.db
+
+

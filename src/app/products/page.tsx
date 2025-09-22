@@ -4,9 +4,13 @@ import { useCartStore } from '@/store/cart'
 import { useState } from 'react'
 
 const PRODUCTS = [
-  { id: 'p1', name: 'Product A', price: 199, description: 'Elegant and powerful.' },
-  { id: 'p2', name: 'Product B', price: 299, description: 'Refined for performance.' },
-  { id: 'p3', name: 'Product C', price: 399, description: 'Minimal yet capable.' },
+  // Main appliances (with variants handled on detail page)
+  { id: 'ac_unit', name: 'Aire Acondicionado Inverter 12k BTU', price: 450, description: 'Eficiente y silencioso. Nuevo o reacondicionado.' },
+  { id: 'water_heater', name: 'Calentador Eléctrico Instantáneo', price: 180, description: 'Sin tanque (tankless). Nuevo o reacondicionado.' },
+  // A few sample accessories (from ~40)
+  { id: 'mount_bracket', name: 'Soporte de Pared', price: 25, description: 'Soporte universal para instalación.' },
+  { id: 'copper_tube', name: 'Tubo de Cobre 3m', price: 30, description: 'Para kits de instalación.' },
+  { id: 'insulation_tape', name: 'Cinta de Aislamiento', price: 5, description: 'Aislamiento térmico para tuberías.' },
 ]
 
 export default function ProductsPage() {

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import CartButton from "./ui/CartButton";
+import { HoverCard } from "./ui/HoverCard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,11 +31,36 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col bg-white text-black">
           <header className="sticky top-0 z-40 backdrop-blur bg-white/70 border-b border-black/10">
             <div className="mx-auto max-w-6xl h-16 flex items-center justify-between px-4">
-              <Link href="/" className="text-xl font-semibold tracking-tight">TerMo</Link>
+              <Link href="/" className="text-xl font-semibold tracking-tight"><strong>TermoTronic</strong></Link>
               <nav className="hidden md:flex gap-6 text-sm items-center">
-                <Link href="/">Home</Link>
-                <Link href="/products">Products</Link>
-                <Link href="/support/faq">Support</Link>
+                <Link href="/">Inicio</Link>
+                <HoverCard
+                  trigger={<span className="cursor-pointer">Productos</span>}
+                  content={(
+                    <div className="w-64">
+                      <div className="text-xs uppercase opacity-60 mb-2">Calentadores</div>
+                      <ul className="space-y-1 mb-3">
+                        <li><Link href="/products/termotronic" className="hover:underline">Termotronic</Link></li>
+                        <li><Link href="/products/cbx" className="hover:underline">CBX</Link></li>
+                      </ul>
+                      <div className="text-xs uppercase opacity-60 mb-2">Accesorios</div>
+                      <Link href="/accessories" className="hover:underline">Ver Accesorios</Link>
+                    </div>
+                  )}
+                />
+                <HoverCard
+                  trigger={<span className="cursor-pointer">Soporte</span>}
+                  content={(
+                    <div className="w-56">
+                      <ul className="space-y-1">
+                        <li><Link href="/support/faq" className="hover:underline">Preguntas frecuentes</Link></li>
+                        <li><Link href="/support/docs" className="hover:underline">Documentos</Link></li>
+                        <li><Link href="/support/partners" className="hover:underline">Aliados</Link></li>
+                        <li><Link href="/support/contact" className="hover:underline">Contáctanos</Link></li>
+                      </ul>
+                    </div>
+                  )}
+                />
                 <CartButton />
               </nav>
             </div>
@@ -42,7 +68,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <footer className="border-t border-black/10 py-10">
             <div className="mx-auto max-w-6xl text-sm flex flex-col md:flex-row items-center justify-between gap-4 px-4">
-              <p className="opacity-70">© {new Date().getFullYear()} TerMo. All rights reserved.</p>
+              <p className="opacity-70">© {new Date().getFullYear()} <strong>TermoTronic</strong>. All rights reserved.</p>
               <div className="flex gap-6 opacity-80">
                 <Link href="/support/docs">Docs</Link>
                 <Link href="/support/contact">Contact</Link>

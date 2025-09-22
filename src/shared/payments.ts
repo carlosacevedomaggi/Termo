@@ -10,7 +10,7 @@ export type PaymentField = {
 }
 
 export type PaymentMethod = {
-  id: 'zelle' | 'pagomovil' | 'bank' | 'binance' | 'card'
+  id: 'zelle' | 'pagomovil' | 'bank' | 'binance' | 'card' | 'paypal'
   label: string
   description?: string
   currency: PaymentCurrency
@@ -44,6 +44,19 @@ const MERCHANT = {
 }
 
 export const PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: 'paypal',
+    label: 'PayPal (USD)',
+    description: 'Pay using your PayPal account',
+    currency: 'USD',
+    merchantInfo: [
+      { label: 'PayPal', value: 'paypal-business@example.com' },
+    ],
+    fields: [
+      { id: 'paypalEmail', label: 'Your PayPal email', type: 'email', required: true },
+      { id: 'paypalTxn', label: 'Transaction ID (optional)', type: 'text', placeholder: 'e.g., 9AB12345CD6789012' },
+    ],
+  },
   {
     id: 'card',
     label: 'Credit/Debit Card',
