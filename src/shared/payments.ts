@@ -1,4 +1,4 @@
-export type PaymentCurrency = 'USD' | 'VES' | 'USDT'
+export type PaymentCurrency = 'USD' | 'VES'
 
 export type PaymentField = {
   id: string
@@ -10,7 +10,7 @@ export type PaymentField = {
 }
 
 export type PaymentMethod = {
-  id: 'zelle' | 'pagomovil' | 'bank' | 'binance' | 'card' | 'paypal'
+  id: 'zelle' | 'pagomovil' | 'bank' | 'card' | 'paypal'
   label: string
   description?: string
   currency: PaymentCurrency
@@ -27,20 +27,18 @@ export const VENEZUELAN_BANK_OPTIONS: { label: string; value: string }[] = [
 ]
 
 const MERCHANT = {
-  zelleName: 'TerMo Store',
-  zelleEmail: 'your-zelle-email@example.com',
-  pmFullName: 'TerMo Store, C.A.',
-  pmPhone: '0412-0000000',
-  pmNationalId: 'V-12345678',
+  zelleName: 'INDUSTRIAS TERMOTRONIC',
+  zelleEmail: 'pagos@termotronic.com',
+  pmFullName: 'INDUSTRIAS TERMOTRONIC',
+  pmPhone: '0412-TERMOTRO',
+  pmNationalId: 'J-301781899',
   pmBankName: 'Banesco',
   pmBankCode: '0134',
-  bankFullName: 'TerMo Store, C.A.',
-  bankNationalId: 'J-12345678-9',
-  bankName: 'Mercantil',
-  bankAccountType: 'Cuenta Corriente',
-  bankAccountNumber: '0105-0000-00-0000000000',
-  binancePayId: '123456789',
-  usdtTrc20Address: 'Txxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  bankFullName: 'INDUSTRIAS TERMOTRONIC',
+  bankNationalId: 'J-301781899',
+  bankName: 'Banesco',
+  bankAccountType: 'Cuenta Verde Efectivo US$',
+  bankAccountNumber: '01341740720021814454',
 }
 
 export const PAYMENT_METHODS: PaymentMethod[] = [
@@ -50,11 +48,11 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
     description: 'Pay using your PayPal account',
     currency: 'USD',
     merchantInfo: [
-      { label: 'PayPal', value: 'paypal-business@example.com' },
+      { label: 'PayPal Business', value: 'paypal@termotronic.com' },
     ],
     fields: [
-      { id: 'paypalEmail', label: 'Your PayPal email', type: 'email', required: true },
-      { id: 'paypalTxn', label: 'Transaction ID (optional)', type: 'text', placeholder: 'e.g., 9AB12345CD6789012' },
+      { id: 'paypalEmail', label: 'Correo PayPal', type: 'email', required: true },
+      { id: 'paypalTxn', label: 'ID de transacción (opcional)', type: 'text', placeholder: 'p. ej. 9AB12345CD6789012' },
     ],
   },
   {
@@ -63,13 +61,12 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
     description: 'Pay securely with your card',
     currency: 'USD',
     merchantInfo: [
-      { label: 'Status', value: 'Enabled' },
+      { label: 'Proveedor', value: 'PayPal Checkout' },
+      { label: 'Tarjetas', value: 'Visa, Mastercard, American Express' },
     ],
     fields: [
-      { id: 'cardNumber', label: 'Card number', type: 'text', required: true, placeholder: '1234 5678 9012 3456' },
-      { id: 'cardExpiry', label: 'Expiry (MM/YY)', type: 'text', required: true, placeholder: 'MM/YY' },
-      { id: 'cardCvv', label: 'CVV', type: 'text', required: true, placeholder: '123' },
-      { id: 'nationalId', label: 'N° de cédula', type: 'text', required: true, placeholder: 'V-00000000' },
+      { id: 'cardHolder', label: 'Nombre en la tarjeta', type: 'text', required: true },
+      { id: 'cardEmail', label: 'Correo del titular', type: 'email', required: true },
     ],
   },
   {
@@ -82,9 +79,9 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
       { label: 'Zelle email', value: MERCHANT.zelleEmail },
     ],
     fields: [
-      { id: 'senderName', label: 'Sender full name', type: 'text', required: true },
-      { id: 'senderEmail', label: 'Sender email', type: 'email', required: true },
-      { id: 'confirmation', label: 'Confirmation number (optional)', type: 'text', placeholder: 'e.g., ABC123' },
+      { id: 'senderName', label: 'Nombre del remitente', type: 'text', required: true },
+      { id: 'senderEmail', label: 'Correo del remitente', type: 'email', required: true },
+      { id: 'confirmation', label: 'Número de confirmación (opcional)', type: 'text', placeholder: 'p. ej. ABC123' },
     ],
   },
   {
@@ -107,33 +104,20 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
   },
   {
     id: 'bank',
-    label: 'Transferencia bancaria (VES)',
-    description: 'Transferencia bancaria tradicional en bolívares',
-    currency: 'VES',
+    label: 'Depósito Banesco Verde (USD)',
+    description: 'Depósito directo en cuenta Banesco Verde en dólares',
+    currency: 'USD',
     merchantInfo: [
       { label: 'Banco', value: MERCHANT.bankName },
       { label: 'Tipo de cuenta', value: MERCHANT.bankAccountType },
       { label: 'Nº de cuenta', value: MERCHANT.bankAccountNumber },
       { label: 'Titular', value: MERCHANT.bankFullName },
-      { label: 'Cédula/RIF', value: MERCHANT.bankNationalId },
+      { label: 'RIF', value: MERCHANT.bankNationalId },
+      { label: 'Instrucción', value: 'Deposita en taquilla y envía el comprobante a tienda@termotronic.com' },
     ],
     fields: [
-      { id: 'payerBank', label: 'Tu banco', type: 'select', required: true, options: VENEZUELAN_BANK_OPTIONS },
-      { id: 'reference', label: 'Referencia de transferencia', type: 'text', required: true },
-    ],
-  },
-  {
-    id: 'binance',
-    label: 'Binance Pay / USDT',
-    description: 'Pago en USDT (Binance Pay o TRC20)',
-    currency: 'USDT',
-    merchantInfo: [
-      { label: 'Binance Pay ID', value: MERCHANT.binancePayId },
-      { label: 'USDT TRC20', value: MERCHANT.usdtTrc20Address },
-    ],
-    fields: [
-      { id: 'payerHandle', label: 'Tu usuario (o email) de Binance', type: 'text', required: true },
-      { id: 'txid', label: 'TXID / Comprobante', type: 'text', placeholder: 'Opcional' },
+      { id: 'depositDate', label: 'Fecha del depósito', type: 'text', required: true, placeholder: 'DD/MM/AAAA' },
+      { id: 'reference', label: 'Número de comprobante', type: 'text', required: true },
     ],
   },
 ]

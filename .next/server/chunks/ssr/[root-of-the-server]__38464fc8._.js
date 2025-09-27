@@ -134,7 +134,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 function HoverCard({ trigger, content }) {
     const [open, setOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [spacerHeight, setSpacerHeight] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
     const contentRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const closeTimer = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const openMenu = ()=>{
@@ -148,14 +147,6 @@ function HoverCard({ trigger, content }) {
         if (closeTimer.current) clearTimeout(closeTimer.current);
         closeTimer.current = setTimeout(()=>setOpen(false), 160);
     };
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (open && contentRef.current) {
-            const rect = contentRef.current.getBoundingClientRect();
-            setSpacerHeight(rect.height);
-        }
-    }, [
-        open
-    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "relative",
         onMouseEnter: openMenu,
@@ -166,33 +157,24 @@ function HoverCard({ trigger, content }) {
                 children: trigger
             }, void 0, false, {
                 fileName: "[project]/src/app/ui/HoverCard.tsx",
-                lineNumber: 33,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    height: open ? spacerHeight : 0
-                }
-            }, void 0, false, {
-                fileName: "[project]/src/app/ui/HoverCard.tsx",
-                lineNumber: 35,
+                lineNumber: 25,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 ref: contentRef,
-                className: `absolute left-0 top-full bg-white border border-border rounded-xl shadow-lg p-3 transition-opacity duration-150 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`,
+                className: `absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 origin-top bg-white text-slate-900 border border-black/10 rounded-xl shadow-xl p-4 transition-all duration-150 ${open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`,
                 onMouseEnter: openMenu,
                 onMouseLeave: scheduleClose,
                 children: content
             }, void 0, false, {
                 fileName: "[project]/src/app/ui/HoverCard.tsx",
-                lineNumber: 36,
+                lineNumber: 26,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/ui/HoverCard.tsx",
-        lineNumber: 32,
+        lineNumber: 24,
         columnNumber: 5
     }, this);
 }

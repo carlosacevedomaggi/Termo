@@ -20,6 +20,7 @@ model Order {
   method     String
   currency   String
   amount     Int         // amount in cents/minor units
+  reference  String?
   items      OrderItem[]
 }
 

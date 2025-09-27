@@ -19,8 +19,8 @@ A small e-commerce app focused on selling three products with payment options co
   - Payment methods (manual/offline confirmation):
     - Zelle (USD)
     - Pago Móvil (VES)
-    - Transferencia bancaria (VES)
-    - Binance Pay / USDT (or on-chain TRC20)
+    - Depósito Banesco Verde (USD)
+    - PayPal (USD)
   - Method-specific instructions and field validation in checkout
 
 - Where to configure payments
@@ -96,7 +96,7 @@ Goal: Add a card option (“Pay with card”) that charges the exact order amoun
   - Frontend: Card element integration and order confirmation screen
   - Backend: Payment intent API + webhooks + order linkage, admin visibility of payment status
 
-### 2.3 Manual methods (Zelle / Pago Móvil / Transferencia / USDT)
+### 2.3 Manual methods (Zelle / Pago Móvil / Depósito Banesco)
 
 - Show exact amounts in the method’s currency (USD, VES, USDT)
 - Require references/TXIDs; optionally accept proof of payment image
@@ -159,7 +159,7 @@ Why: Better SEO (SSR/SSG), built-in API routes for orders/payments/webhooks, ser
 - Preview: `npm run preview`
 
 Update merchant data
-- Edit `src/shared/payments.ts` with your real Zelle, Pago Móvil, bank, and Binance details
+- Edit `src/shared/payments.ts` with your real Zelle, Pago Móvil, depósito Banesco, and PayPal details
 
 ---
 
@@ -168,6 +168,7 @@ Update merchant data
 - Add orders persistence + admin dashboard
 - Integrate notifications (email/WhatsApp)
 - Add proof-of-payment upload for manual methods
+- Integrate PayPal Checkout for cards and wallets
 - Add credit/debit cards via Stripe or a regional PSP
 - Migrate to Next.js + API routes
 - Add webhooks for card confirmations

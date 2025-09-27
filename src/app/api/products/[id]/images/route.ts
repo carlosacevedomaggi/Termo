@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
-  const id = params.id
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const folder = id === 'termotronic' ? 'termo' : id === 'cbx' ? 'CBX' : ''
   if (!folder) return NextResponse.json([], { status: 200 })
   try {

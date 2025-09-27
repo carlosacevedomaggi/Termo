@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 type HoverCardProps = {
   trigger: React.ReactNode
@@ -8,7 +8,6 @@ type HoverCardProps = {
 
 export function HoverCard({ trigger, content }: HoverCardProps) {
   const [open, setOpen] = useState(false)
-  const [spacerHeight, setSpacerHeight] = useState<number>(0)
   const contentRef = useRef<HTMLDivElement | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -21,21 +20,12 @@ export function HoverCard({ trigger, content }: HoverCardProps) {
     closeTimer.current = setTimeout(() => setOpen(false), 160)
   }
 
-  useEffect(() => {
-    if (open && contentRef.current) {
-      const rect = contentRef.current.getBoundingClientRect()
-      setSpacerHeight(rect.height)
-    }
-  }, [open])
-
   return (
     <div className="relative" onMouseEnter={openMenu} onMouseLeave={scheduleClose}>
       <div className="select-none">{trigger}</div>
-      {/* Reserve vertical space while open so the area remains hoverable */}
-      <div style={{ height: open ? spacerHeight : 0 }} />
       <div
         ref={contentRef}
-        className={`absolute left-0 top-full bg-white border border-border rounded-xl shadow-lg p-3 transition-opacity duration-150 ${open? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 origin-top bg-white text-slate-900 border border-black/10 rounded-xl shadow-xl p-4 transition-all duration-150 ${open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
         onMouseEnter={openMenu}
         onMouseLeave={scheduleClose}
       >

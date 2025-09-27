@@ -1,0 +1,21 @@
+
+
+Métodos de pago Termotronic
+
+- Depósito Banesco Verde (USD)
+  - Banco: Banesco
+  - Titular: Industrias Termotronic
+  - RIF: J-301781899
+  - Cuenta Verde Efectivo US$: 01341740720021814454
+  - Instrucciones: Realiza el depósito en taquilla y envía la captura a tienda@termotronic.com.
+
+- Zelle (USD)
+  - Destinatario: Industrias Termotronic
+  - Correo: pagos@termotronic.com
+  - Concepto: Número de pedido
+  - Enviar comprobante a tienda@termotronic.com
+
+- PayPal (USD)
+  - Botón "Pay with PayPal" abre el flujo oficial para iniciar sesión y pagar.
+  - También disponible el botón "Debit or Credit Card" para tarjetas americanas a través de PayPal.
+  - Ambos botones se integran con la API de PayPal Checkout.

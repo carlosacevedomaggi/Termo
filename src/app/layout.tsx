@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
 import Link from "next/link";
 import CartButton from "./ui/CartButton";
 import { HoverCard } from "./ui/HoverCard";
+import logoBlanco from "../../images/logoBlanco.png";
+import { PayPalProvider } from "./PayPalProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,35 +31,47 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen flex flex-col bg-white text-black">
-          <header className="sticky top-0 z-40 backdrop-blur bg-white/70 border-b border-black/10">
-            <div className="mx-auto max-w-6xl h-16 flex items-center justify-between px-4">
-              <Link href="/" className="text-xl font-semibold tracking-tight"><strong>TermoTronic</strong></Link>
-              <nav className="hidden md:flex gap-6 text-sm items-center">
-                <Link href="/">Inicio</Link>
+        <PayPalProvider>
+          <div className="min-h-screen flex flex-col bg-white text-black">
+          <header className="sticky top-0 z-40 backdrop-blur bg-slate-900/80 border-b border-black/10">
+            <div className="mx-auto w-full max-w-6xl h-16 flex items-center justify-between px-4">
+              <Link href="/" aria-label="Inicio" className="flex items-center gap-3">
+                <div className="relative h-10 w-36 md:h-12 md:w-44">
+                  <Image
+                    src={logoBlanco}
+                    alt="Termotronic"
+                    fill
+                    sizes="(max-width: 768px) 144px, 176px"
+                    priority
+                    className="object-contain"
+                  />
+                </div>
+              </Link>
+              <nav className="hidden lg:flex gap-6 text-sm items-center text-white">
+                <Link href="/" className="transition hover:text-blue-200">Inicio</Link>
                 <HoverCard
-                  trigger={<span className="cursor-pointer">Productos</span>}
+                  trigger={<Link href="/products" className="cursor-pointer transition hover:text-blue-200">Productos</Link>}
                   content={(
                     <div className="w-64">
                       <div className="text-xs uppercase opacity-60 mb-2">Calentadores</div>
                       <ul className="space-y-1 mb-3">
-                        <li><Link href="/products/termotronic" className="hover:underline">Termotronic</Link></li>
-                        <li><Link href="/products/cbx" className="hover:underline">CBX</Link></li>
+                        <li><Link href="/products/calentadores-termotronic-ce-11w4" className="transition hover:text-blue-500">Termotronic</Link></li>
+                        <li><Link href="/products/calentadores-cbx-ce-11cbx3" className="transition hover:text-blue-500">CBX</Link></li>
                       </ul>
                       <div className="text-xs uppercase opacity-60 mb-2">Accesorios</div>
-                      <Link href="/accessories" className="hover:underline">Ver Accesorios</Link>
+                      <Link href="/products#accesorios" className="transition hover:text-blue-500">Ver Accesorios</Link>
                     </div>
                   )}
                 />
                 <HoverCard
-                  trigger={<span className="cursor-pointer">Soporte</span>}
+                  trigger={<span className="cursor-pointer transition hover:text-blue-200">Soporte</span>}
                   content={(
                     <div className="w-56">
                       <ul className="space-y-1">
-                        <li><Link href="/support/faq" className="hover:underline">Preguntas frecuentes</Link></li>
-                        <li><Link href="/support/docs" className="hover:underline">Documentos</Link></li>
-                        <li><Link href="/support/partners" className="hover:underline">Aliados</Link></li>
-                        <li><Link href="/support/contact" className="hover:underline">Contáctanos</Link></li>
+                        <li><Link href="/support/faq" className="transition hover:text-blue-500">Preguntas frecuentes</Link></li>
+                        <li><Link href="/support/docs" className="transition hover:text-blue-500">Documentos</Link></li>
+                        <li><Link href="/support/partners" className="transition hover:text-blue-500">Aliados</Link></li>
+                        <li><Link href="/support/contact" className="transition hover:text-blue-500">Contáctanos</Link></li>
                       </ul>
                     </div>
                   )}
@@ -66,17 +81,18 @@ export default function RootLayout({
             </div>
           </header>
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-black/10 py-10">
+          <footer className="border-t border-black/10 bg-slate-950 text-white py-10">
             <div className="mx-auto max-w-6xl text-sm flex flex-col md:flex-row items-center justify-between gap-4 px-4">
-              <p className="opacity-70">© {new Date().getFullYear()} <strong>TermoTronic</strong>. All rights reserved.</p>
+              <p className="opacity-70">© {new Date().getFullYear()} <strong>TermoTronic</strong>. Todos los derechos reservados.</p>
               <div className="flex gap-6 opacity-80">
-                <Link href="/support/docs">Docs</Link>
-                <Link href="/support/contact">Contact</Link>
-                <Link href="/support/locations">Locations</Link>
+                <Link href="/support/docs" className="transition hover:text-blue-300">Documentos</Link>
+                <Link href="/support/contact" className="transition hover:text-blue-300">Contáctanos</Link>
+                <Link href="/support/partners" className="transition hover:text-blue-300">Aliados</Link>
               </div>
             </div>
           </footer>
-        </div>
+          </div>
+        </PayPalProvider>
       </body>
     </html>
   );

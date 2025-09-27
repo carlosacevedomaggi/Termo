@@ -2,26 +2,41 @@
 import { useMemo, useState } from 'react'
 import { useCartStore } from '@/store/cart'
 import { PAYMENT_METHODS } from '@/shared/payments'
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
+import { usePayPalConfig } from '@/app/PayPalProvider'
 
 export default function CheckoutPage() {
   const { items, clear } = useCartStore()
-  const total = items.reduce((acc, i) => acc + i.price * (i.quantity ?? 1), 0)
+  const total = useMemo(() => items.reduce((acc, i) => acc + i.price * (i.quantity ?? 1), 0), [items])
   const [status, setStatus] = useState<'idle'|'processing'|'done'>('idle')
   const [selectedMethodId, setSelectedMethodId] = useState(PAYMENT_METHODS[0].id)
   const selectedMethod = useMemo(() => PAYMENT_METHODS.find(m => m.id === selectedMethodId)!, [selectedMethodId])
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({})
-  const [cardRegion, setCardRegion] = useState<'US'|'VE'>('US')
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [{ isPending }] = usePayPalScriptReducer()
+  const { isConfigured: isPayPalConfigured } = usePayPalConfig()
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const valid = validateForm()
+    if (!valid) return
+    if ((selectedMethod.id === 'paypal' || selectedMethod.id === 'card') && isPayPalConfigured) {
+      // PayPal buttons handle submission
+      return
+    }
+    await finalizeOrder(selectedMethod.id)
+  }
+
+  const validateForm = () => {
     const newErrors: Record<string, string> = {}
     selectedMethod.fields.forEach(f => { if (f.required && !fieldValues[f.id]) newErrors[f.id] = 'Required' })
     if (!fieldValues['name']) newErrors['name'] = 'Required'
     if (!fieldValues['email']) newErrors['email'] = 'Required'
     if (!fieldValues['address']) newErrors['address'] = 'Required'
-    if (Object.keys(newErrors).length) { setErrors(newErrors); return }
-    setErrors({})
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+  const finalizeOrder = async (methodId: string, externalId?: string) => {
     setStatus('processing')
     try {
       const res = await fetch('/api/orders', {
@@ -31,10 +46,11 @@ export default function CheckoutPage() {
           name: fieldValues['name'],
           email: fieldValues['email'],
           address: fieldValues['address'],
-          method: selectedMethod.id,
+          method: methodId,
           currency: selectedMethod.currency,
           amount: Math.round(total * 100),
-          items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity ?? 1 })),
+          items: orderItems.map(i => ({ id: i.key, name: i.name, price: i.total / i.quantity, quantity: i.quantity })),
+          reference: externalId,
         })
       })
       if (!res.ok) throw new Error('Order creation failed')
@@ -46,6 +62,13 @@ export default function CheckoutPage() {
       setStatus('idle')
     }
   }
+
+  const orderItems = useMemo(() => items.map(i => ({
+    key: i.id,
+    name: i.name,
+    quantity: i.quantity ?? 1,
+    total: i.price * (i.quantity ?? 1),
+  })), [items])
 
   if (status === 'done') {
     return (
@@ -97,16 +120,6 @@ export default function CheckoutPage() {
                 </label>
               ))}
             </div>
-            {selectedMethod.id === 'card' && (
-              <div className="flex items-center gap-3 mt-1">
-                <span className="text-xs opacity-70">Card region</span>
-                <div className="inline-flex rounded-md border border-border overflow-hidden">
-                  <button type="button" onClick={()=>setCardRegion('US')} className={`px-2 py-1 text-xs ${cardRegion==='US'?'bg-black text-white':'bg-white'}`}>🇺🇸 US</button>
-                  <button type="button" onClick={()=>setCardRegion('VE')} className={`px-2 py-1 text-xs ${cardRegion==='VE'?'bg-black text-white':'bg-white'}`}>🇻🇪 VE</button>
-                </div>
-              </div>
-            )}
-
             <div className="border border-border rounded-xl p-4">
               <div className="text-sm font-medium mb-2">Instructions</div>
               <ul className="text-sm space-y-1">
@@ -123,13 +136,14 @@ export default function CheckoutPage() {
                   <span className="inline-flex items-center gap-1">
                     <span className="text-xs font-semibold border px-1.5 py-0.5 rounded">VISA</span>
                     <span className="text-xs font-semibold border px-1.5 py-0.5 rounded">Mastercard</span>
+                    <span className="text-xs font-semibold border px-1.5 py-0.5 rounded">AmEx</span>
                   </span>
                 </div>
               )}
             </div>
 
             <div className="grid gap-4">
-              {selectedMethod.fields.filter(f => !(selectedMethod.id==='card' && cardRegion==='US' && f.id==='nationalId')).map(f => (
+              {selectedMethod.fields.map(f => (
                 <div key={f.id}>
                   <label className="text-sm opacity-70">{f.label}</label>
                   {f.type === 'select' ? (
@@ -146,17 +160,54 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <button disabled={status==='processing'} className="btn btn-primary">{status==='processing' ? 'Processing…' : 'Place order'}</button>
+          <div className="space-y-4">
+            {(selectedMethod.id === 'paypal' || selectedMethod.id === 'card') && isPayPalConfigured && (
+              <div className="border border-border rounded-lg p-4 bg-white">
+                <PayPalButtons
+                  style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: selectedMethod.id === 'paypal' ? 'paypal' : 'pay' }}
+                  fundingSource={selectedMethod.id === 'card' ? 'card' : undefined}
+                  disabled={status==='processing' || isPending}
+                  createOrder={(_, actions) => {
+                    return actions.order.create({
+                      purchase_units: [
+                        {
+                          amount: {
+                            currency_code: selectedMethod.currency,
+                            value: total.toFixed(2),
+                          },
+                        },
+                      ],
+                    })
+                  }}
+                  onApprove={async (_, actions) => {
+                    const details = await actions.order?.capture?.()
+                    const externalId = details?.id ?? 'paypal-order'
+                    await finalizeOrder(selectedMethod.id, externalId)
+                  }}
+                  onError={err => {
+                    console.error('PayPal error', err)
+                    setStatus('idle')
+                  }}
+                />
+              </div>
+            )}
+            {(selectedMethod.id === 'paypal' || selectedMethod.id === 'card') && !isPayPalConfigured && (
+              <div className="rounded-lg border border-orange-300 bg-orange-50 px-4 py-3 text-sm text-orange-800">
+                Configura `NEXT_PUBLIC_PAYPAL_CLIENT_ID` para habilitar los pagos en línea. Mientras tanto, por favor selecciona uno de los métodos manuales.
+              </div>
+            )}
+            <button disabled={status==='processing'} className="btn btn-primary w-full">{status==='processing' ? 'Processing…' : 'Place order'}</button>
+          </div>
         </form>
       </div>
 
       <div className="border border-border rounded-xl p-5 h-fit">
         <div className="font-medium mb-3">Order Summary</div>
         <div className="space-y-2 text-sm">
-          {items.map(i => (
-            <div key={i.id} className="flex items-center justify-between">
-              <span>{i.name} × {i.quantity ?? 1}</span>
-              <span>${i.price * (i.quantity ?? 1)}</span>
+          {orderItems.map(item => (
+            <div key={item.key} className="flex items-center justify-between">
+              <span>{item.name} × {item.quantity}</span>
+              <span>${item.total}</span>
             </div>
           ))}
         </div>

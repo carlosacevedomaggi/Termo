@@ -20,34 +20,34 @@ const PRODUCTS = [
     // Main appliances (with variants handled on detail page)
     {
         id: 'ac_unit',
-        name: 'Inverter AC 12k BTU',
+        name: 'Aire Acondicionado Inverter 12k BTU',
         price: 450,
-        description: 'Efficient cooling. New or refurbished.'
+        description: 'Eficiente y silencioso. Nuevo o reacondicionado.'
     },
     {
         id: 'water_heater',
-        name: 'Electric Water Heater 40L',
+        name: 'Calentador Eléctrico Instantáneo',
         price: 180,
-        description: 'Compact and reliable. New or refurbished.'
+        description: 'Sin tanque (tankless). Nuevo o reacondicionado.'
     },
     // A few sample accessories (from ~40)
     {
         id: 'mount_bracket',
-        name: 'Wall Mount Bracket',
+        name: 'Soporte de Pared',
         price: 25,
-        description: 'Universal bracket for AC installation.'
+        description: 'Soporte universal para instalación.'
     },
     {
         id: 'copper_tube',
-        name: 'Copper Tube 3m',
+        name: 'Tubo de Cobre 3m',
         price: 30,
-        description: 'For AC installation kits.'
+        description: 'Para kits de instalación.'
     },
     {
         id: 'insulation_tape',
-        name: 'Insulation Tape',
+        name: 'Cinta de Aislamiento',
         price: 5,
-        description: 'Thermal insulation for pipes.'
+        description: 'Aislamiento térmico para tuberías.'
     }
 ];
 function ProductsPage() {

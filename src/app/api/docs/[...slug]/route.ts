@@ -14,9 +14,10 @@ function findBaseDir(): string | null {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { slug?: string[] } }
+  { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  const parts = params.slug || []
+  const { slug } = await params
+  const parts = slug || []
   if (parts.length < 2) {
     return NextResponse.json({ error: "Invalid path" }, { status: 400 })
   }
