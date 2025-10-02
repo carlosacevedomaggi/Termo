@@ -10,6 +10,14 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("admin")
+}
 model Order {
   id         String      @id @default(cuid())
   createdAt  DateTime    @default(now())
@@ -17,11 +25,22 @@ model Order {
   name       String
   email      String
   address    String
+  phone      String?
   method     String
   currency   String
   amount     Int         // amount in cents/minor units
   reference  String?
+  fulfillmentType FulfillmentType @default(PICKUP)
+  fulfillmentLocationId String?
+  deliveryEtaMinutes Int?
+  deliveryFee Int? // stored in cents
   items      OrderItem[]
+  receiptPreference String?
+  pickupLocationId String?
+  pickupLocationName String?
+  pickupLocationAddress String?
+  manualPaymentMethod String?
+  metadata   Json?
 }
 
 model OrderItem {
@@ -44,4 +63,64 @@ model Accessory {
   image       String?
   price       Int
   active      Boolean  @default(true)
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  slug        String    @unique
+  name        String
+  tagline     String?
+  description String?
+  heroImage   String?
+  products    Product[]
+}
+
+model Product {
+  id                 String          @id @default(cuid())
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  slug               String          @unique
+  name               String
+  description        String
+  manufacturer       String?
+  model              String?
+  availability       Int             @default(0)
+  price              Int             // stored in cents
+  refurbishedPrice   Int?
+  supportsCondition  Boolean         @default(false)
+  kitAddOnName       String?
+  kitAddOnPrice      Int?
+  categoryId         String
+  heroImage          String?
+  shortDescription   String?
+  category           Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  images             ProductImage[]
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  position  Int      @default(0)
+}
+
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  fullName    String
+  email       String
+  company     String?
+  phone       String?
+  inquiryType String?
+  message     String?
+  metadata    Json?
+  status      String   @default("new")
+}
+
+enum FulfillmentType {
+  PICKUP
+  DELIVERY
 }

@@ -13,6 +13,7 @@ type CartState = {
   addItem: (item: Omit<CartItem, 'quantity'>) => void
   removeItem: (id: string) => void
   clear: () => void
+  setItems: (items: CartItem[]) => void
 }
 
 const STORAGE_KEY = 'termo.cart.v1'
@@ -47,7 +48,8 @@ export const useCartStore = create<CartState>((set, get) => ({
     save(updated)
     return { items: updated }
   }),
-  clear: () => set(() => { save([]); return { items: [] } })
+  clear: () => set(() => { save([]); return { items: [] } }),
+  setItems: (items) => set(() => { save(items); return { items } }),
 }))
 
 

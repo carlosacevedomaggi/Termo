@@ -1,175 +1,86 @@
 # TerMo Store
 
-A small e-commerce app focused on selling three products with payment options commonly used in Venezuela. This repository currently contains a React + Vite SPA; we also outline the future migration to Next.js and a production-ready backend.
+E-commerce platform for TerMo’s products (Termotronic heaters, CBX line, accessories) with payment methods common in Venezuela and the groundwork for full distributor fulfillment.
 
-## 1) Current (what exists in the app today)
+## Stack Overview
+- **Next.js 15** (App Router, TypeScript)
+- **React 19**, **TailwindCSS**, **Framer Motion**
+- **Zustand** for client-side cart state
+- **Prisma + SQLite (dev)**, Postgres planned for production
+- **PayPal Checkout** integration (client ID via `NEXT_PUBLIC_PAYPAL_CLIENT_ID`)
 
-- Stack
-  - React 18 + Vite 5 (SPA)
-  - TypeScript
-  - React Router (routing)
-  - Zustand (cart state, localStorage persistence)
-  - TailwindCSS (styling)
-  - Framer Motion (micro-animations)
+## Current Features
+- Landing page, product catalog, detailed product views
+- Cart with quantity management (persisted in localStorage)
+- Checkout form capturing customer info and payment method
+- Manual payment methods with instructions: Zelle, Pago Móvil, Depósito Banesco Verde, PayPal manual reference
+- PayPal Checkout button for online payments (sandbox-ready)
+- Support pages: FAQ, documentation downloads from `/support/docs`
 
-- Implemented features
-  - Products listing and detail pages
-  - Cart (add/remove/clear; quantity aggregation)
-  - Checkout form for customer info
-  - Payment methods (manual/offline confirmation):
-    - Zelle (USD)
-    - Pago Móvil (VES)
-    - Depósito Banesco Verde (USD)
-    - PayPal (USD)
-  - Method-specific instructions and field validation in checkout
+## Project Structure
+```
+src/
+ ├─ app/        # Next.js routes
+ │   ├─ page.tsx (home)
+ │   ├─ products/
+ │   │   ├─ page.tsx (catalog with Termotronic/CBX/Accesorios sections)
+ │   │   ├─ [id]/         # dynamic product detail
+ │   │   │   ├─ page.tsx
+ │   │   │   └─ ProductDetailClient.tsx
+ │   ├─ support/
+ │   │   ├─ docs/page.tsx (document downloads)
+ │   │   └─ partners/page.tsx (distributors & service centers with toggle)
+ │   ├─ api/       # file-streaming API routes for docs/images
+ │   └─ layout.tsx
+ ├─ lib/
+ │   └─ product-data.ts   # loads metadata/images from `images/`
+ ├─ store/
+ │   └─ cart.ts
+ └─ shared/
+    └─ payments.ts
+```
 
-- Where to configure payments
-  - `src/shared/payments.ts` defines payment methods, merchant receiving accounts, and the per-method form fields customers must complete.
-  - Replace placeholder merchant data (emails, bank account, phone, IDs, wallet) with real values before going live.
+Images live under `images/` (source assets) and `public/images/` (Next.js served). Metadata files (`title-price-desc.txt`) feed product descriptions, specs, pricing, availability.
 
-- Current flow (manual payments)
-  1) User adds items to cart (stored with Zustand → localStorage)
-  2) User goes to checkout, enters Name/Email/Address
-  3) User selects a payment method and fills in method-specific data (e.g., reference/TXID)
-  4) Submission validates required fields and shows a “Thank you” confirmation
-  5) Operationally, payment reconciliation is manual (no backend yet): you check Zelle / bank / Binance and fulfill
+## Environment Variables
+- `.env` (local) and `.env.example`
+  - `NEXT_PUBLIC_PAYPAL_CLIENT_ID` – PayPal client ID for Checkout SDK.
+  - Future additions will include backend API URLs, JWT secrets, database URLs, etc.
 
-> Note: There is no persistent order storage or admin dashboard yet; those are part of future work below.
+## Distributor & Service Network Pages
+- `/support/partners` renders two datasets (distributors list, warranty/service centers) with a stateful toggle.
+- Data seeded from `partners` content in code; future plan is to move to database-driven content.
 
----
+## Product Catalog Enhancements
+- Termotronic & CBX cards show structured spec lists instead of long paragraphs.
+- Toggle between `Nuevo` and `Reconstruido` with fixed pricing (298 USD Termotronic, 206 USD CBX) and optional installation kit add-on.
+- Product detail pages show gallery, concise spec blocks, paragraph-formatted description, and kit/toggle controls.
 
-## 2) Future implementation (what we will build next)
+## Upcoming Distributor Platform (Separate App)
+- See `READMEAPP.md` in root for the mobile/portal product spec.
+- Summary: capture distributor data in DB, route orders to nearest distributor, support staff approvals for offline payments, provide mobile app for distributors (order management, restock requests), HQ admin oversight.
 
-The business will receive funds directly in the settlement currency of the selected method (USD or VES). We will not do FX conversion in-app; instead, we’ll display and charge in the currency appropriate to the method.
+## Local Development
+```
+npm install
+npm run dev
+```
+Visit `http://localhost:3000`; Next.js handles API streams for `/support/docs` and product image endpoints.
 
-### 2.1 Orders and admin (applies to all methods)
+While running locally, every order submission is also POSTed to `http://localhost:4000/orders`. You can run a mock server there (e.g., `npx http-echo-server 4000`) to observe the full JSON payload that will be consumed by the mobile app. Each line item now includes both `id` and `productId` fields so downstream services can keep their existing schema while we maintain Prisma references.
 
-- Data model (minimum)
-  - order: id, createdAt, status (pending_payment → awaiting_review → paid → fulfilled/cancelled), customer info (name, email, address), selected payment method, currency, totals (amount, currency), method fields (reference/TXID), optional proof (file URL)
-  - order_items: orderId, productId, name, unitPrice, quantity, subtotal
-  - payments: orderId, method, amount, currency, providerId/txid/reference, status, timestamps
+## Deployment
+- Target: Vercel / Render / Railway
+- Prepare `.env` with PayPal key and future backend credentials
+- Use managed Postgres when persisting orders/distributors; current Prisma config uses SQLite for dev
 
-- API endpoints
-  - POST /orders → create order from cart and checkout form
-  - POST /orders/:id/proof (multipart) → attach a proof image (optional) for manual methods
-  - PATCH /orders/:id/status → admin-only status transitions
+## Roadmap Summary
+1. Persist orders + payment status (Prisma + Postgres)
+2. Admin/staff portal for order review & manual payment approval
+3. Integrate PayPal webhooks for automatic confirmation
+4. Build distributor mobile app (React Native/Expo) using backend APIs
+5. Notifications (push/email/WhatsApp)
+6. Inventory/restock tracking per distributor
+7. Harden security (auth, rate limits, audits) and observability
 
-- Notifications
-  - Email/WhatsApp to customer on order creation and on status changes
-  - Internal email/WhatsApp on new order pending review
-
-- Admin UI
-  - List/filter orders
-  - View references/TXIDs/proofs
-  - Mark paid/cancelled, add notes, audit trail
-
-- Security
-  - Server-side validation
-  - Rate limiting for public endpoints
-  - Signed webhook verification (for card gateways)
-
-### 2.2 Credit/Debit cards plan
-
-Goal: Add a card option (“Pay with card”) that charges the exact order amount in the currency we settle (USD or VES), without doing on-the-fly FX conversions in the app.
-
-- Gateway options (pick based on your company/entity availability)
-  - Stripe (typical for USD settlement; confirm your country eligibility)
-  - Mercado Pago or a regional PSP that supports your legal entity and desired currency (VES/USD)
-  - Local acquirer via PSP if available for Venezuela
-
-- Frontend (cards)
-  - Add “Pay with card” as a payment method next to manual methods
-  - Render provider UI (e.g., Stripe Payment Element)
-  - Flow: Client requests a Payment Intent (or equivalent) from backend → provider element confirms payment → show success/failure
-
-- Backend (cards)
-  - Endpoint: POST /payments/intent → creates provider intent/session with amount and currency (USD or VES as per business policy)
-  - Endpoint: POST /orders → create the order (pending_payment or processing)
-  - Webhooks: receive provider events (e.g., payment_intent.succeeded) and mark the related order as paid
-  - Reconciliation: store payment events for audit; handle refunds/voids later
-
-- UX & policy
-  - Clearly display the currency being charged (USD or VES)
-  - Use 3D Secure when required; handle declines gracefully with retry
-
-- Deliverables
-  - Frontend: Card element integration and order confirmation screen
-  - Backend: Payment intent API + webhooks + order linkage, admin visibility of payment status
-
-### 2.3 Manual methods (Zelle / Pago Móvil / Depósito Banesco)
-
-- Show exact amounts in the method’s currency (USD, VES, USDT)
-- Require references/TXIDs; optionally accept proof of payment image
-- Admin confirms and marks as paid after reconciling in banking/crypto tools
-
----
-
-## 3) Next.js migration plan
-
-Why: Better SEO (SSR/SSG), built-in API routes for orders/payments/webhooks, server components, and easy deployment to Vercel.
-
-- Steps
-  1) Create a Next.js (App Router) project with TypeScript + Tailwind
-  2) Move pages to `app/` routes: `/`, `/products`, `/products/[id]`, `/cart` (client), `/checkout` (client), `/support/*`
-  3) Keep Zustand for client cart, or migrate cart persistence with cookies/Server Actions if desired
-  4) Implement API routes:
-     - `POST /api/orders`
-     - `POST /api/payments/intent`
-     - `POST /api/webhooks/{provider}` (e.g., /stripe, /mercadopago)
-  5) Add `/admin/orders` (protected) for review and status updates
-  6) Configure environment variables in `.env.local`
-  7) Deploy to Vercel (or similar); use managed Postgres (Neon/Supabase/RDS)
-
-- Cutover
-  - Keep the same UI styles; update imports and routing
-  - Validate client vs server component boundaries
-  - Dry run end-to-end in staging before DNS switch
-
----
-
-## 4) Production backend design
-
-- Tech
-  - Next.js API routes (or separate Node/Express service) with TypeScript
-  - Postgres for orders/payments (Neon/Supabase/RDS)
-  - Object storage (S3-compatible) for proofs
-  - Job queue/cron for reconciliation (BullMQ, Cloud Tasks, or hosted alternatives)
-  - Email (Resend/SendGrid) and WhatsApp Business API/Twilio for messaging
-  - Admin auth (NextAuth/OAuth) with role-based permissions
-
-- Data flow
-  1) Client submits order (cart + customer info + chosen method/currency)
-  2) Manual method: order stays `pending_payment` until admin confirms reference/txid/proof
-  3) Card method: backend creates payment intent; webhook marks order `paid` after provider confirmation
-  4) Admin fulfills and updates status; customer notified
-
-- Observability & security
-  - Structured logs, request tracing, error monitoring
-  - Verify webhook signatures and apply rate limits
-  - Principle of least privilege for API keys; separate envs (dev/stage/prod)
-  - Database backups and migration strategy
-
----
-
-## 5) Local development
-
-- Install deps: `npm i`
-- Run dev: `npm run dev`
-- Build: `npm run build`
-- Preview: `npm run preview`
-
-Update merchant data
-- Edit `src/shared/payments.ts` with your real Zelle, Pago Móvil, depósito Banesco, and PayPal details
-
----
-
-## 6) Roadmap
-
-- Add orders persistence + admin dashboard
-- Integrate notifications (email/WhatsApp)
-- Add proof-of-payment upload for manual methods
-- Integrate PayPal Checkout for cards and wallets
-- Add credit/debit cards via Stripe or a regional PSP
-- Migrate to Next.js + API routes
-- Add webhooks for card confirmations
-- Harden security, monitoring, and backups
+For the distributor/mobile initiative, consult `READMEAPP.md` (recreate from design spec if missing) and plan development in a dedicated workspace.

@@ -7,6 +7,7 @@ import CartButton from "./ui/CartButton";
 import { HoverCard } from "./ui/HoverCard";
 import logoBlanco from "../../images/logoBlanco.png";
 import { PayPalProvider } from "./PayPalProvider";
+import { NextAuthProvider } from "./providers/NextAuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <PayPalProvider>
+          <NextAuthProvider>
           <div className="min-h-screen flex flex-col bg-white text-black">
           <header className="sticky top-0 z-40 backdrop-blur bg-slate-900/80 border-b border-black/10">
             <div className="mx-auto w-full max-w-6xl h-16 flex items-center justify-between px-4">
@@ -92,6 +94,7 @@ export default function RootLayout({
             </div>
           </footer>
           </div>
+          </NextAuthProvider>
         </PayPalProvider>
       </body>
     </html>

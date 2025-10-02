@@ -1,9 +1,8 @@
 import ProductsClient from "./ProductsClient"
-import { getProductCategories } from "@/lib/product-data"
+import { redirect } from "next/navigation"
 
 export default function ProductsPage() {
-  const categories = getProductCategories()
-  return <ProductsClient categories={categories} />
+  redirect("/products/catalog")
 }
 
 

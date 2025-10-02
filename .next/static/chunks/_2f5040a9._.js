@@ -62,6 +62,47 @@ function ContactClient() {
     const groupedOptions = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "ContactClient.useMemo[groupedOptions]": ()=>inquiryOptions
     }["ContactClient.useMemo[groupedOptions]"], []);
+    const [status, setStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        state: "idle"
+    });
+    const handleSubmit = async (event)=>{
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const payload = Object.fromEntries(formData.entries());
+        if (!payload.fullName || !payload.email) {
+            setStatus({
+                state: "error",
+                message: "Nombre y correo son requeridos"
+            });
+            return;
+        }
+        setStatus({
+            state: "submitting"
+        });
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) {
+                throw new Error("Request failed");
+            }
+            event.currentTarget.reset();
+            setStatus({
+                state: "success",
+                message: "Mensaje enviado. Nuestro equipo le contactará pronto."
+            });
+        } catch (error) {
+            console.error(error);
+            setStatus({
+                state: "error",
+                message: "No se pudo enviar el mensaje. Intente nuevamente."
+            });
+        }
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "min-h-[70vh] bg-gradient-to-br from-slate-50 via-white to-slate-100",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -74,12 +115,12 @@ function ContactClient() {
                         children: "Contáctenos"
                     }, void 0, false, {
                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                        lineNumber: 43,
+                        lineNumber: 70,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                    lineNumber: 42,
+                    lineNumber: 69,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -93,7 +134,7 @@ function ContactClient() {
                                     children: "Intención"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                    lineNumber: 48,
+                                    lineNumber: 75,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -104,18 +145,18 @@ function ContactClient() {
                                             description: item.description
                                         }, index, false, {
                                             fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                            lineNumber: 51,
+                                            lineNumber: 78,
                                             columnNumber: 17
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                    lineNumber: 49,
+                                    lineNumber: 76,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                            lineNumber: 47,
+                            lineNumber: 74,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -126,167 +167,177 @@ function ContactClient() {
                                     "aria-hidden": true
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                    lineNumber: 57,
+                                    lineNumber: 84,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "rounded-3xl border border-black/5 bg-white/80 p-6 md:p-8 shadow-lg backdrop-blur",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                                         className: "space-y-5",
+                                        onSubmit: handleSubmit,
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "grid gap-4 md:grid-cols-2",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InputField, {
+                                                        name: "fullName",
                                                         label: "Nombre completo",
                                                         id: "fullName",
-                                                        placeholder: "Tu nombre"
+                                                        placeholder: "Tu nombre",
+                                                        required: true
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                        lineNumber: 61,
+                                                        lineNumber: 88,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InputField, {
-                                                        label: "Email Address",
+                                                        name: "email",
+                                                        label: "Correo electrónico",
                                                         id: "email",
                                                         placeholder: "name@example.com",
-                                                        type: "email"
+                                                        type: "email",
+                                                        required: true
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                        lineNumber: 62,
+                                                        lineNumber: 89,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                lineNumber: 60,
+                                                lineNumber: 87,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "grid gap-4 md:grid-cols-2",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InputField, {
-                                                        label: "Correo Electrónico",
-                                                        id: "email-alt",
-                                                        placeholder: "contacto@empresa.com",
-                                                        type: "email"
+                                                        name: "company",
+                                                        label: "Compañía",
+                                                        id: "company",
+                                                        placeholder: "Nombre de tu empresa"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                        lineNumber: 65,
+                                                        lineNumber: 92,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InputField, {
+                                                        name: "phone",
                                                         label: "Teléfono",
                                                         id: "phone",
                                                         placeholder: "Ej. +58 412-1234567"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                        lineNumber: 66,
+                                                        lineNumber: 93,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                lineNumber: 64,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InputField, {
-                                                label: "Compañía",
-                                                id: "company",
-                                                placeholder: "Nombre de tu empresa"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                lineNumber: 68,
+                                                lineNumber: 91,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SelectField, {
                                                 label: "Intención",
                                                 id: "inquiry",
                                                 placeholder: "Selecciona una opción",
+                                                name: "inquiryType",
                                                 options: groupedOptions
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                lineNumber: 70,
+                                                lineNumber: 96,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InputField, {
+                                                name: "message",
                                                 label: "Tu Mensaje",
                                                 id: "message",
                                                 placeholder: "Cuéntanos cómo podemos ayudarte",
                                                 as: "textarea"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                lineNumber: 77,
+                                                lineNumber: 104,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "pt-2",
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    type: "submit",
-                                                    className: "group relative inline-flex h-12 w-full items-center justify-center overflow-hidden rounded-full bg-black px-6 text-sm font-semibold tracking-wide text-white transition focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "absolute inset-0 translate-y-full bg-gradient-to-r from-blue-600 to-purple-500 transition-transform duration-300 group-hover:translate-y-0"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                            lineNumber: 84,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "relative",
-                                                            children: "Enviar"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                            lineNumber: 85,
-                                                            columnNumber: 21
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                    lineNumber: 80,
-                                                    columnNumber: 19
-                                                }, this)
-                                            }, void 0, false, {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "submit",
+                                                        disabled: status.state === "submitting",
+                                                        className: "group relative inline-flex h-12 w-full items-center justify-center overflow-hidden rounded-full bg-black px-6 text-sm font-semibold tracking-wide text-white transition focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 disabled:opacity-70",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "absolute inset-0 translate-y-full bg-gradient-to-r from-blue-600 to-purple-500 transition-transform duration-300 group-hover:translate-y-0"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/support/contact/ContactClient.tsx",
+                                                                lineNumber: 112,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "relative",
+                                                                children: status.state === "submitting" ? "Enviando…" : "Enviar"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/support/contact/ContactClient.tsx",
+                                                                lineNumber: 113,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/app/support/contact/ContactClient.tsx",
+                                                        lineNumber: 107,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    status.state !== "idle" && status.message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "mt-3 text-sm ".concat(status.state === "success" ? "text-green-700" : "text-red-600"),
+                                                        children: status.message
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/support/contact/ContactClient.tsx",
+                                                        lineNumber: 116,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                                lineNumber: 79,
+                                                lineNumber: 106,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                        lineNumber: 59,
+                                        lineNumber: 86,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                    lineNumber: 58,
+                                    lineNumber: 85,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                            lineNumber: 56,
+                            lineNumber: 83,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                    lineNumber: 46,
+                    lineNumber: 73,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-            lineNumber: 41,
+            lineNumber: 68,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-        lineNumber: 40,
+        lineNumber: 67,
         columnNumber: 5
     }, this);
 }
-_s(ContactClient, "EoM2NQ5nZ8/iAj0tNkIru4XUdjY=");
+_s(ContactClient, "oXQVNfZKNr0FOhWqT2NXYtzVvos=");
 _c = ContactClient;
 function ContactDetail(param) {
     let { icon: Icon, label, description } = param;
@@ -300,12 +351,12 @@ function ContactDetail(param) {
                     "aria-hidden": true
                 }, void 0, false, {
                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                    lineNumber: 107,
+                    lineNumber: 140,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                lineNumber: 106,
+                lineNumber: 139,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -315,7 +366,7 @@ function ContactDetail(param) {
                         children: description
                     }, void 0, false, {
                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                        lineNumber: 110,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -323,25 +374,25 @@ function ContactDetail(param) {
                         children: label
                     }, void 0, false, {
                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                        lineNumber: 111,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                lineNumber: 109,
+                lineNumber: 142,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-        lineNumber: 105,
+        lineNumber: 138,
         columnNumber: 5
     }, this);
 }
 _c1 = ContactDetail;
 function InputField(param) {
-    let { label, id, placeholder, type = "text", as = "input" } = param;
+    let { label, id, placeholder, type = "text", as = "input", name, required } = param;
     const Field = as === "textarea" ? "textarea" : "input";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
         className: "block text-sm font-medium text-black/70",
@@ -350,25 +401,27 @@ function InputField(param) {
             label,
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Field, {
                 id: id,
+                name: name,
                 placeholder: placeholder,
                 className: "mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm shadow-inner outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200",
                 rows: as === "textarea" ? 5 : undefined,
-                type: as === "textarea" ? undefined : type
+                type: as === "textarea" ? undefined : type,
+                required: required
             }, void 0, false, {
                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                lineNumber: 131,
+                lineNumber: 166,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-        lineNumber: 129,
+        lineNumber: 164,
         columnNumber: 5
     }, this);
 }
 _c2 = InputField;
 function SelectField(param) {
-    let { label, id, placeholder, options } = param;
+    let { label, id, placeholder, options, name } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
         className: "block text-sm font-medium text-black/70",
         htmlFor: id,
@@ -380,6 +433,7 @@ function SelectField(param) {
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                         id: id,
                         defaultValue: "",
+                        name: name,
                         className: "w-full appearance-none rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm shadow-inner outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -389,7 +443,7 @@ function SelectField(param) {
                                 children: placeholder || "Selecciona"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                lineNumber: 159,
+                                lineNumber: 198,
                                 columnNumber: 11
                             }, this),
                             options.map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -397,13 +451,13 @@ function SelectField(param) {
                                     children: option.label
                                 }, option.value, false, {
                                     fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                                    lineNumber: 163,
+                                    lineNumber: 202,
                                     columnNumber: 13
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                        lineNumber: 154,
+                        lineNumber: 192,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -411,19 +465,19 @@ function SelectField(param) {
                         children: "▾"
                     }, void 0, false, {
                         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                        lineNumber: 168,
+                        lineNumber: 207,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-                lineNumber: 153,
+                lineNumber: 191,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/support/contact/ContactClient.tsx",
-        lineNumber: 151,
+        lineNumber: 189,
         columnNumber: 5
     }, this);
 }

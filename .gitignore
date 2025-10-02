@@ -10,4 +10,4 @@ pnpm-debug.log*
 
 /src/generated/prisma
 
-
+.cursor 
