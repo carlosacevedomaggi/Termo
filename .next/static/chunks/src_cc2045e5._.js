@@ -234,36 +234,48 @@ function PayPalProvider(param) {
     let { children } = param;
     _s1();
     const rawClientId = ("TURBOPACK compile-time value", "<YOUR_PAYPAL_CLIENT_ID>");
-    const isConfigured = Boolean(rawClientId && rawClientId.length > 0);
+    // Only consider configured if we have a valid client ID (not empty and not a placeholder)
+    const isConfigured = Boolean(rawClientId && rawClientId.length > 0 && rawClientId !== '<YOUR_PAYPAL_CLIENT_ID>' && rawClientId !== 'sb');
     if (!isConfigured && ("TURBOPACK compile-time value", "development") !== 'production') {
-        console.warn('NEXT_PUBLIC_PAYPAL_CLIENT_ID is not defined; using PayPal sandbox client id (sb). Configure a real key for production.');
+        console.warn('NEXT_PUBLIC_PAYPAL_CLIENT_ID is not configured. PayPal payment buttons will be disabled. Set NEXT_PUBLIC_PAYPAL_CLIENT_ID in .env.local to enable PayPal payments.');
     }
-    const clientId = isConfigured ? rawClientId : 'sb';
     const options = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "PayPalProvider.useMemo[options]": ()=>({
-                'client-id': clientId,
+                'client-id': rawClientId || '',
                 intent: 'CAPTURE',
                 currency: 'USD'
             })
     }["PayPalProvider.useMemo[options]"], [
-        clientId
+        rawClientId
     ]);
+    // Only wrap with PayPalScriptProvider if we have a valid client ID
+    if (!isConfigured) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PayPalConfigContext.Provider, {
+            value: {
+                isConfigured
+            },
+            children: children
+        }, void 0, false, {
+            fileName: "[project]/src/app/PayPalProvider.tsx",
+            lineNumber: 43,
+            columnNumber: 7
+        }, this);
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PayPalConfigContext.Provider, {
         value: {
             isConfigured
         },
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$paypal$2f$react$2d$paypal$2d$js$2f$dist$2f$esm$2f$react$2d$paypal$2d$js$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PayPalScriptProvider"], {
             options: options,
-            deferLoading: !isConfigured,
             children: children
         }, void 0, false, {
             fileName: "[project]/src/app/PayPalProvider.tsx",
-            lineNumber: 35,
+            lineNumber: 51,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/PayPalProvider.tsx",
-        lineNumber: 34,
+        lineNumber: 50,
         columnNumber: 5
     }, this);
 }

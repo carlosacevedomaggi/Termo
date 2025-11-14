@@ -1,5 +1,5 @@
 ---
 description:the priority for this webapp  is to look really modern and elegant. also having subttle animations that make it feel modern. 
 globs:
-alwaysApply: true
+alwaysApply: false
 ---

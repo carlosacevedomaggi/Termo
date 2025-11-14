@@ -8340,7 +8340,7 @@ exports.Prisma.ModelName = {
             "value": "prisma-client-js"
         },
         "output": {
-            "value": "C:\\Users\\chickynice\\Desktop\\termo\\src\\generated\\prisma",
+            "value": "C:\\Users\\chickynice\\Desktop\\ec2\\termo\\src\\generated\\prisma",
             "fromEnvVar": null
         },
         "config": {
@@ -8354,7 +8354,7 @@ exports.Prisma.ModelName = {
             }
         ],
         "previewFeatures": [],
-        "sourceFilePath": "C:\\Users\\chickynice\\Desktop\\termo\\prisma\\schema.prisma",
+        "sourceFilePath": "C:\\Users\\chickynice\\Desktop\\ec2\\termo\\prisma\\schema.prisma",
         "isCustomOutput": true
     },
     "relativeEnvPaths": {
@@ -8368,6 +8368,7 @@ exports.Prisma.ModelName = {
         "db"
     ],
     "activeProvider": "sqlite",
+    "postinstall": false,
     "inlineDatasources": {
         "db": {
             "url": {
