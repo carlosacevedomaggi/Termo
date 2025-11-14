@@ -1,86 +1,196 @@
-# TerMo Store
+# Termo Store
 
-E-commerce platform for TerMo’s products (Termotronic heaters, CBX line, accessories) with payment methods common in Venezuela and the groundwork for full distributor fulfillment.
+E-commerce platform for TerMo's water heater products (Termotronic heaters, CBX control systems, accessories) with payment methods common in Venezuela and distributor fulfillment capabilities.
 
-## Stack Overview
-- **Next.js 15** (App Router, TypeScript)
-- **React 19**, **TailwindCSS**, **Framer Motion**
-- **Zustand** for client-side cart state
-- **Prisma + SQLite (dev)**, Postgres planned for production
-- **PayPal Checkout** integration (client ID via `NEXT_PUBLIC_PAYPAL_CLIENT_ID`)
+## Overview
 
-## Current Features
-- Landing page, product catalog, detailed product views
-- Cart with quantity management (persisted in localStorage)
-- Checkout form capturing customer info and payment method
-- Manual payment methods with instructions: Zelle, Pago Móvil, Depósito Banesco Verde, PayPal manual reference
-- PayPal Checkout button for online payments (sandbox-ready)
-- Support pages: FAQ, documentation downloads from `/support/docs`
+Termo Store is a modern Next.js e-commerce platform designed for the Venezuelan market, supporting multiple payment methods including PayPal, Zelle, Pago Móvil, and bank deposits. The platform includes product catalog management, shopping cart functionality, checkout flow, and groundwork for distributor fulfillment.
 
-## Project Structure
-```
-src/
- ├─ app/        # Next.js routes
- │   ├─ page.tsx (home)
- │   ├─ products/
- │   │   ├─ page.tsx (catalog with Termotronic/CBX/Accesorios sections)
- │   │   ├─ [id]/         # dynamic product detail
- │   │   │   ├─ page.tsx
- │   │   │   └─ ProductDetailClient.tsx
- │   ├─ support/
- │   │   ├─ docs/page.tsx (document downloads)
- │   │   └─ partners/page.tsx (distributors & service centers with toggle)
- │   ├─ api/       # file-streaming API routes for docs/images
- │   └─ layout.tsx
- ├─ lib/
- │   └─ product-data.ts   # loads metadata/images from `images/`
- ├─ store/
- │   └─ cart.ts
- └─ shared/
-    └─ payments.ts
-```
+## Tech Stack
 
-Images live under `images/` (source assets) and `public/images/` (Next.js served). Metadata files (`title-price-desc.txt`) feed product descriptions, specs, pricing, availability.
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **UI**: React 19, TailwindCSS 4
+- **State Management**: Zustand (cart state)
+- **Database**: Prisma + SQLite (dev), PostgreSQL (production)
+- **Payments**: PayPal Checkout SDK
+- **Maps**: Leaflet + React Leaflet (distributor locations)
+- **Authentication**: NextAuth.js (admin panel)
 
-## Environment Variables
-- `.env` (local) and `.env.example`
-  - `NEXT_PUBLIC_PAYPAL_CLIENT_ID` – PayPal client ID for Checkout SDK.
-  - Future additions will include backend API URLs, JWT secrets, database URLs, etc.
+## Quick Start
 
-## Distributor & Service Network Pages
-- `/support/partners` renders two datasets (distributors list, warranty/service centers) with a stateful toggle.
-- Data seeded from `partners` content in code; future plan is to move to database-driven content.
+### Prerequisites
 
-## Product Catalog Enhancements
-- Termotronic & CBX cards show structured spec lists instead of long paragraphs.
-- Toggle between `Nuevo` and `Reconstruido` with fixed pricing (298 USD Termotronic, 206 USD CBX) and optional installation kit add-on.
-- Product detail pages show gallery, concise spec blocks, paragraph-formatted description, and kit/toggle controls.
+- Node.js 20+
+- npm or yarn
 
-## Upcoming Distributor Platform (Separate App)
-- See `READMEAPP.md` in root for the mobile/portal product spec.
-- Summary: capture distributor data in DB, route orders to nearest distributor, support staff approvals for offline payments, provide mobile app for distributors (order management, restock requests), HQ admin oversight.
+### Installation
 
-## Local Development
-```
+```bash
+# Install dependencies
 npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your configuration
+
+# Set up database
+npx prisma generate
+npx prisma migrate dev
+
+# Seed initial data (optional)
+npm run dev
+# Visit http://localhost:3000/api/seed
+```
+
+### Development
+
+```bash
 npm run dev
 ```
-Visit `http://localhost:3000`; Next.js handles API streams for `/support/docs` and product image endpoints.
 
-While running locally, every order submission is also POSTed to `http://localhost:4000/orders`. You can run a mock server there (e.g., `npx http-echo-server 4000`) to observe the full JSON payload that will be consumed by the mobile app. Each line item now includes both `id` and `productId` fields so downstream services can keep their existing schema while we maintain Prisma references.
+Visit `http://localhost:3000`
 
-## Deployment
-- Target: Vercel / Render / Railway
-- Prepare `.env` with PayPal key and future backend credentials
-- Use managed Postgres when persisting orders/distributors; current Prisma config uses SQLite for dev
+### Build
 
-## Roadmap Summary
-1. Persist orders + payment status (Prisma + Postgres)
-2. Admin/staff portal for order review & manual payment approval
-3. Integrate PayPal webhooks for automatic confirmation
-4. Build distributor mobile app (React Native/Expo) using backend APIs
-5. Notifications (push/email/WhatsApp)
-6. Inventory/restock tracking per distributor
-7. Harden security (auth, rate limits, audits) and observability
+```bash
+npm run build
+npm start
+```
 
-For the distributor/mobile initiative, consult `READMEAPP.md` (recreate from design spec if missing) and plan development in a dedicated workspace.
+## Features
+
+### Product Catalog
+
+- **Termotronic Heaters**: Electric tankless water heaters
+- **CBX Control Systems**: Temperature control systems
+- **Accessories**: Installation kits and accessories
+- Product detail pages with galleries, specifications, and descriptions
+- Condition toggle (Nuevo/Reconstruido) with pricing
+- Installation kit add-ons
+
+### Shopping Cart
+
+- Add/remove products
+- Quantity management
+- Persistent cart (localStorage)
+- Real-time price calculations
+
+### Checkout Flow
+
+- Customer information collection
+- Fulfillment options (pickup/delivery)
+- Location selection with map integration
+- Multiple payment methods:
+  - PayPal (online)
+  - Credit/Debit Card (via PayPal Checkout)
+  - Zelle (USD)
+  - Pago Móvil (VES)
+  - Bank Deposit (Banesco Verde USD)
+
+### Support Resources
+
+- **FAQ Page**: Common questions and answers
+- **Documentation Downloads**: Product manuals and installation guides
+- **Distributor Network**: Map of authorized distributors and service centers
+- **Contact Form**: Customer inquiries
+
+### Admin Panel
+
+- Product management (CRUD)
+- Category management
+- Order viewing
+- User authentication
+
+## Project Structure
+
+```
+termo/
+├── src/
+│   ├── app/                    # Next.js App Router routes
+│   │   ├── page.tsx           # Homepage
+│   │   ├── products/          # Product catalog
+│   │   ├── cart/              # Shopping cart
+│   │   ├── checkout/          # Checkout flow
+│   │   ├── support/           # Support pages
+│   │   ├── admin/             # Admin panel
+│   │   └── api/               # API routes
+│   ├── lib/                   # Utilities and data
+│   │   ├── product-data.ts   # Product metadata loader
+│   │   ├── partners.ts        # Distributor data
+│   │   └── maps.ts           # Map utilities
+│   ├── store/                 # State management
+│   │   └── cart.ts            # Cart store (Zustand)
+│   ├── shared/                # Shared types/constants
+│   │   └── payments.ts       # Payment method definitions
+│   └── ui/                    # Reusable UI components
+├── images/                    # Source product images
+├── public/images/             # Served product images
+├── prisma/                    # Database schema and migrations
+└── Documentos/                # Product documentation PDFs
+```
+
+## Documentation
+
+- **[SETUP.md](./SETUP.md)** - Detailed setup and configuration
+- **[FEATURES.md](./FEATURES.md)** - Complete feature documentation
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical architecture
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Development workflows
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Production deployment
+- **[ROADMAP.md](./ROADMAP.md)** - Future features and plans
+
+## Environment Variables
+
+Create `.env.local`:
+
+```env
+# PayPal
+NEXT_PUBLIC_PAYPAL_CLIENT_ID=your-paypal-client-id
+
+# Database
+DATABASE_URL="file:./dev.db"
+
+# NextAuth (for admin)
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
+
+# API (for order submission)
+NEXT_PUBLIC_API_URL=http://localhost:4000
+```
+
+## Payment Methods
+
+### PayPal
+
+- Online payment processing
+- PayPal Checkout SDK integration
+- Sandbox and production modes
+
+### Manual Payment Methods
+
+- **Zelle**: USD transfers with confirmation
+- **Pago Móvil**: Venezuelan mobile payment (VES)
+- **Bank Deposit**: Banesco Verde USD account
+
+All manual payments require order confirmation via email.
+
+## Distributor Network
+
+- Interactive map showing distributor locations
+- Toggle between distributors and service centers
+- Distance calculation and routing
+- Pickup location selection during checkout
+
+## Order Processing
+
+Orders are submitted to:
+- Local database (Prisma)
+- External API endpoint (`/api/orders`)
+- Email notification (future)
+
+Order status tracking and payment verification coming soon.
+
+## License
+
+Private project - Termotronic
+

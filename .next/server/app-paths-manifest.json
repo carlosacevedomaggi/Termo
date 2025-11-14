@@ -1,10 +1,6 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/cart/page": "app/cart/page.js",
-  "/checkout/page": "app/checkout/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/products/[id]/page": "app/products/[id]/page.js",
   "/products/catalog/page": "app/products/catalog/page.js",
   "/products/page": "app/products/page.js"
 }
